@@ -22,6 +22,13 @@ use Ratchet\ConnectionInterface;
 
 // Run the server application through the WebSocket protocol on port 8080
 $app = new Ratchet\App("localhost", 8080, '0.0.0.0', $loop);
-$app->route('/chat', new Chat, array('*'));
+
+// 実行時に引数がない場合chatというチャンネル作成
+if (empty($args)) $app->route('chat', new Chat(), ['*']);
+
+// 引数を受け取っている場合引数分の引数名のチャンネル作成
+foreach ($argv as $s) {
+    $app->route($s, new Chat(), ['*']);
+}
 
 $app->run();
